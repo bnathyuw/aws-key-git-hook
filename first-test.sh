@@ -2,11 +2,12 @@
 # file: first-test.sh
 
 root=`pwd`
+workingDir=$root/foo
 
 oneTimeSetUp()
 {
-    mkdir $root/foo
-    cd $root/foo
+    mkdir $workingDir
+    cd $workingDir
     git init
     cd $root
 }
@@ -14,12 +15,12 @@ oneTimeSetUp()
 oneTimeTearDown()
 {
     cd $root
-    rm -rf $root/foo
+    rm -rf $workingDir
 }
 
 setUp()
 {
-    cd $root/foo
+    cd $workingDir
 }
 
 tearDown()
