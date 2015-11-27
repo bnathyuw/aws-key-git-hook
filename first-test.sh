@@ -14,12 +14,24 @@ oneTimeSetUp()
 oneTimeTearDown()
 {
     cd $root
-    rm -r $root/foo
+    rm -rf $root/foo
+}
+
+setUp()
+{
+    cd $root/foo
+}
+
+tearDown()
+{
+    cd $root    
 }
 
 testEquality()
 {
-    assertEquals 1 1
+    echo Hello, world! > bar.txt
+    git add -A
+    git commit -m "Wotcha, world!"
 }
 
 # load shunit
