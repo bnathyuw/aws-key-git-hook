@@ -1,0 +1,5 @@
+#! /bin/sh
+
+echo "AWS key found. Aborting commit." 
+
+exit 1

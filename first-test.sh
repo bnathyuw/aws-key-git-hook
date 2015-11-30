@@ -9,6 +9,7 @@ oneTimeSetUp()
     mkdir $workingDir
     cd $workingDir
     git init
+    ln $root/pre-commit ./.git/hooks/pre-commit
     cd $root
 }
 
@@ -25,14 +26,20 @@ setUp()
 
 tearDown()
 {
-    cd $root    
+    cd $workingDir
+    git reset --hard
+    cd $root
 }
 
-testEquality()
+test_it_displays_an_alert_when_an_aws_key_is_committed()
 {
-    echo Hello, world! > bar.txt
+    cp $root/i.have.aws.keys.conf $workingDir
     git add -A
-    git commit -m "Wotcha, world!"
+
+    git commit -m "This commit should fail" 2>&1 | ( 
+        read result
+        assertEquals "AWS key found. Aborting commit." "$result" 
+    )
 }
 
 # load shunit
