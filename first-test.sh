@@ -1,4 +1,4 @@
-#! /bin/sh
+
 # file: first-test.sh
 
 root=`pwd`
@@ -20,6 +20,13 @@ tearDown()
     rm -rf $workingDir
 }
 
+assertPattern()
+{
+    expected=$1
+    actual=$2
+    assertTrue "Expected '$expected' but got '$actual'" "[[ '$actual' =~ '$expected' ]]"
+}
+
 test_it_displays_an_alert_when_an_aws_key_is_committed()
 {
     cp $root/i.have.aws.keys.conf $workingDir
@@ -39,7 +46,7 @@ test_it_does_not_alert_when_no_aws_keys_are_committed()
     message="This commit should succeed"
     git commit -m "$message" 2>&1 | (
         read result
-        assertTrue "Expected a commit message, but got '$result'" "[[ '$result' =~ '$message' ]]"
+        assertPattern "$message" "$result"
     )
 }
 # load shunit
