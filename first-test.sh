@@ -24,7 +24,7 @@ assertPattern()
 {
     expected=$1
     actual=$2
-    assertTrue "Expected '$expected' but got '$actual'" "[[ '$actual' =~ '$expected' ]]"
+    assertTrue "Expected message matching '$expected' but got '$actual'" "[[ '$actual' =~ '$expected' ]]"
 }
 
 test_it_displays_an_alert_when_an_aws_key_is_committed()
