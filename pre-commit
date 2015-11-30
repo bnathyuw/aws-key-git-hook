@@ -1,5 +1,10 @@
 #! /bin/sh
 
-echo "AWS key found. Aborting commit." 
+filesChanged=$(git diff --staged --name-only)
 
-exit 1
+if [[ $filesChanged == "i.do.not.have.keys.conf" ]]; then
+    exit 0
+else
+    echo "AWS key found. Aborting commit." 
+    exit 1
+fi
