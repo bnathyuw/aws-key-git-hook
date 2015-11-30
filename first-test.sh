@@ -4,24 +4,12 @@
 root=`pwd`
 workingDir=$root/foo
 
-oneTimeSetUp()
+setUp()
 {
     mkdir $workingDir
     cd $workingDir
     git init
     ln $root/pre-commit ./.git/hooks/pre-commit
-    cd $root
-}
-
-oneTimeTearDown()
-{
-    cd $root
-    rm -rf $workingDir
-}
-
-setUp()
-{
-    cd $workingDir
 }
 
 tearDown()
@@ -29,6 +17,7 @@ tearDown()
     cd $workingDir
     git reset --hard
     cd $root
+    rm -rf $workingDir
 }
 
 test_it_displays_an_alert_when_an_aws_key_is_committed()
@@ -42,5 +31,16 @@ test_it_displays_an_alert_when_an_aws_key_is_committed()
     )
 }
 
+test_it_does_not_alert_when_no_aws_keys_are_committed()
+{
+    cp $root/i.do.not.have.keys.conf $workingDir
+    git add -A
+
+    message="This commit should succeed"
+    git commit -m "$message" 2>&1 | (
+        read result
+        assertTrue "Expected a commit message, but got '$result'" "[[ '$result' =~ '$message' ]]"
+    )
+}
 # load shunit
 . shunit2
