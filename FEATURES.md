@@ -11,7 +11,9 @@
 - Matches keys and secrets enclosed in single quotes
 - Matches keys and secrets enclosed in double quotes
 - Matches keys and secrets surrounded by whitespace
-- Displays details of the keys and secrets found to the user
+- Displays to the user a single key found
+- Displays to the user a single secret found
+- Displays to the user multiple keys and secrets found
 - Prompts for confirmation: ‘Do you want to commit anyway? (y/N)’
 - Does not commit when user types n
 - Does not commit when user hits return
