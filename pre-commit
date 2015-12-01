@@ -1,10 +1,18 @@
 #! /bin/sh
 
-filesChanged=$(git diff --staged --name-only)
+findFilesChanged(){
+    git diff --staged --name-only
+}
 
-if [[ $filesChanged == "i.do.not.have.keys.conf" ]]; then
-    exit 0
-else
-    echo "AWS key found. Aborting commit." 
-    exit 1
-fi
+checkFiles(){
+    read filesChanged
+
+    if [[ $filesChanged == "i.do.not.have.keys.conf" ]]; then
+        exit 0
+    else
+        echo "AWS key found. Aborting commit." 
+        exit 1
+    fi
+}
+
+findFilesChanged | checkFiles
