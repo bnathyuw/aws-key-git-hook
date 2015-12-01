@@ -1,4 +1,4 @@
-
+#!/bin/sh
 # file: first-test.sh
 
 root=`pwd`
