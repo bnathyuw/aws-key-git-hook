@@ -4,15 +4,22 @@ findFilesChanged(){
     git diff --staged --name-only
 }
 
-checkFiles(){
-    read filesChanged
+findChanges(){
+    read files
 
-    if [[ $filesChanged == "i.do.not.have.keys.conf" ]]; then
-        exit 0
-    else
-        echo "AWS key found. Aborting commit." 
+    egrep -n '[^A-Z0-9][A-Z0-9]{20}[^A-Z0-9]' "$files"
+}
+
+report(){
+    read keys
+
+    if [ -n "$keys" ]; then
+        echo "AWS key found. Aborting commit."
+        echo $keys
         exit 1
+    else
+        exit 0
     fi
 }
 
-findFilesChanged | checkFiles
+findFilesChanged | findChanges | report
