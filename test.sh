@@ -29,18 +29,29 @@ assertPattern()
 
 test_it_displays_an_alert_when_an_aws_key_is_committed()
 {
-    cp $root/i.have.aws.keys.conf $workingDir
+    cp $root/i.have.an.aws.key.conf $workingDir
     git add -A
 
     git commit -m "This commit should fail" 2>&1 | ( 
         read result
-        assertEquals "AWS key found. Aborting commit." "$result" 
+        assertEquals "AWS credentials found. Aborting commit." "$result" 
+    )
+}
+
+test_it_displays_an_alert_when_an_aws_secret_is_committed()
+{
+    cp $root/i.have.an.aws.secret.conf $workingDir
+    git add -A
+
+    git commit -m "This commit should fail" 2>&1 | (
+        read result
+        assertEquals "AWS credentials found. Aborting commit." "$result"
     )
 }
 
 test_it_does_not_alert_when_no_aws_keys_are_committed()
 {
-    cp $root/i.do.not.have.keys.conf $workingDir
+    cp $root/i.do.not.have.aws.credentials.conf $workingDir
     git add -A
 
     message="This commit should succeed"

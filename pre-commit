@@ -7,15 +7,15 @@ findFilesChanged(){
 findChanges(){
     read files
 
-    egrep -n '[^A-Z0-9][A-Z0-9]{20}[^A-Z0-9]' "$files"
+    egrep -n '([^A-Z0-9][A-Z0-9]{20}[^A-Z0-9]|[^A-Za-z0-9/+=][A-Za-z0-9/+=]{40}[^A-Za-z0-9/+=])' "$files"
 }
 
 report(){
-    read keys
+    read credentials
 
-    if [ -n "$keys" ]; then
-        echo "AWS key found. Aborting commit."
-        echo $keys
+    if [ -n "$credentials" ]; then
+        echo "AWS credentials found. Aborting commit."
+        echo $credentials
         exit 1
     else
         exit 0
