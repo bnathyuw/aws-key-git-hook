@@ -1,10 +1,9 @@
 ## DONE
 - Intercepts commit when an AWS key is present in the staged files
+- Intercepts commit when an AWS secret is present in the staged files
 - Does not intercept commit when no key or secret is present in the staged files
 
 ## TO DO
-
-- Intercepts commit when an AWS secret is present in the staged files
 - Matches keys and secrets in newly added files
 - Matches keys and secrets in edited files
 - Matches keys and secrets at the end of a line
