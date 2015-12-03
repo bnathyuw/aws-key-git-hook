@@ -22,8 +22,8 @@ tearDown()
 
 assertPattern()
 {
+    read actual
     expected=$1
-    actual=$2
     assertTrue "Expected message matching '$expected' but got '$actual'" "[[ '$actual' =~ '$expected' ]]"
 }
 
@@ -79,10 +79,7 @@ test_it_does_not_alert_when_a_new_file_containing_no_aws_keys_are_committed()
     git add -A
 
     message="This commit should succeed"
-    git commit -m "$message" 2>&1 | (
-        read result
-        assertPattern "$message" "$result"
-    )
+    git commit -m "$message" 2>&1 | assertPattern "$message"
 }
 # load shunit
 . shunit2
