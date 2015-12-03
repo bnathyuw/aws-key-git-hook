@@ -27,7 +27,7 @@ assertPattern()
     assertTrue "Expected message matching '$expected' but got '$actual'" "[[ '$actual' =~ '$expected' ]]"
 }
 
-test_it_displays_an_alert_when_an_aws_key_is_committed()
+test_it_displays_an_alert_when_a_new_file_containing_an_aws_key_is_committed()
 {
     cp $root/i.have.an.aws.key.conf $workingDir
     git add -A
@@ -38,7 +38,7 @@ test_it_displays_an_alert_when_an_aws_key_is_committed()
     )
 }
 
-test_it_displays_an_alert_when_an_aws_secret_is_committed()
+test_it_displays_an_alert_when_a_new_file_containing_an_aws_secret_is_committed()
 {
     cp $root/i.have.an.aws.secret.conf $workingDir
     git add -A
@@ -49,7 +49,7 @@ test_it_displays_an_alert_when_an_aws_secret_is_committed()
     )
 }
 
-test_it_does_not_alert_when_no_aws_keys_are_committed()
+test_it_does_not_alert_when_a_new_file_containing_no_aws_keys_are_committed()
 {
     cp $root/i.do.not.have.aws.credentials.conf $workingDir
     git add -A
