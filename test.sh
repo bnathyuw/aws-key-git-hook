@@ -27,15 +27,18 @@ assertPattern()
     assertTrue "Expected message matching '$expected' but got '$actual'" "[[ '$actual' =~ '$expected' ]]"
 }
 
+assertCredentialsSpotted()
+{
+    read result
+    assertEquals "AWS credentials found. Aborting commit." "$result" 
+}
+
 test_it_displays_an_alert_when_a_new_file_containing_an_aws_key_is_committed()
 {
     cp $root/i.have.an.aws.key.conf $workingDir
     git add -A
 
-    git commit -m "This commit should fail" 2>&1 | ( 
-        read result
-        assertEquals "AWS credentials found. Aborting commit." "$result" 
-    )
+    git commit -m "This commit should fail" 2>&1 | assertCredentialsSpotted
 }
 
 test_it_displays_an_alert_when_an_aws_key_is_added_to_an_existing_file()
@@ -47,10 +50,7 @@ test_it_displays_an_alert_when_an_aws_key_is_added_to_an_existing_file()
     cat $root/i.have.an.aws.key.conf > $workingDir/to.be.edited.conf
     git add -A
 
-    git commit -m "This commit should fail" 2>&1 | ( 
-        read result
-        assertEquals "AWS credentials found. Aborting commit." "$result" 
-    )
+    git commit -m "This commit should fail" 2>&1 | assertCredentialsSpotted
 }
 
 test_it_displays_an_alert_when_a_new_file_containing_an_aws_secret_is_committed()
@@ -58,10 +58,7 @@ test_it_displays_an_alert_when_a_new_file_containing_an_aws_secret_is_committed(
     cp $root/i.have.an.aws.secret.conf $workingDir
     git add -A
 
-    git commit -m "This commit should fail" 2>&1 | (
-        read result
-        assertEquals "AWS credentials found. Aborting commit." "$result"
-    )
+    git commit -m "This commit should fail" 2>&1 | assertCredentialsSpotted
 }
 
 test_it_displays_an_alert_when_an_aws_secret_is_added_to_an_existing_file()
@@ -73,10 +70,7 @@ test_it_displays_an_alert_when_an_aws_secret_is_added_to_an_existing_file()
     cat $root/i.have.an.aws.secret.conf > $workingDir/to.be.edited.conf
     git add -A
 
-    git commit -m "This commit should fail" 2>&1 | ( 
-        read result
-        assertEquals "AWS credentials found. Aborting commit." "$result" 
-    )
+    git commit -m "This commit should fail" 2>&1 | assertCredentialsSpotted 
 }
 
 test_it_does_not_alert_when_a_new_file_containing_no_aws_keys_are_committed()
