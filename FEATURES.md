@@ -3,9 +3,9 @@
 - Intercepts commit when an AWS secret is present in the staged files
 - Does not intercept commit when no key or secret is present in the staged files
 - Matches keys and secrets in newly added files
+- Matches keys and secrets in edited files
 
 ## TO DO
-- Matches keys and secrets in edited files
 - Matches keys and secrets at the end of a line
 - Matches keys and secrets enclosed in single quotes
 - Matches keys and secrets enclosed in double quotes
@@ -20,4 +20,5 @@
 - Asks again when user types anything else
 - Works on master
 - Works on a branch
+- Doesn't complain when no files have been staged 
 

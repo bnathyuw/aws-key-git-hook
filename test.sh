@@ -38,6 +38,21 @@ test_it_displays_an_alert_when_a_new_file_containing_an_aws_key_is_committed()
     )
 }
 
+test_it_displays_an_alert_when_an_aws_key_is_added_to_an_existing_file()
+{
+    cp $root/i.do.not.have.aws.credentials.conf $workingDir/to.be.edited.conf
+    git add -A
+    git commit -m "Preliminary commit"
+
+    cat $root/i.have.an.aws.key.conf > $workingDir/to.be.edited.conf
+    git add -A
+
+    git commit -m "This commit should fail" 2>&1 | ( 
+        read result
+        assertEquals "AWS credentials found. Aborting commit." "$result" 
+    )
+}
+
 test_it_displays_an_alert_when_a_new_file_containing_an_aws_secret_is_committed()
 {
     cp $root/i.have.an.aws.secret.conf $workingDir
@@ -46,6 +61,21 @@ test_it_displays_an_alert_when_a_new_file_containing_an_aws_secret_is_committed(
     git commit -m "This commit should fail" 2>&1 | (
         read result
         assertEquals "AWS credentials found. Aborting commit." "$result"
+    )
+}
+
+test_it_displays_an_alert_when_an_aws_secret_is_added_to_an_existing_file()
+{
+    cp $root/i.do.not.have.aws.credentials.conf $workingDir/to.be.edited.conf
+    git add -A
+    git commit -m "Preliminary commit"
+
+    cat $root/i.have.an.aws.secret.conf > $workingDir/to.be.edited.conf
+    git add -A
+
+    git commit -m "This commit should fail" 2>&1 | ( 
+        read result
+        assertEquals "AWS credentials found. Aborting commit." "$result" 
     )
 }
 
