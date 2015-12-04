@@ -9,9 +9,9 @@
 - Matches keys and secrets enclosed in double quotes
 - Matches keys and secrets surrounded by whitespace
 - Doesn't complain when no files have been staged 
+- Can handle several staged files
 
 ## TO DO
-- Can handle several staged files
 - Doesn't match strings of characters of not quite the right length
 - Displays to the user a single key found
 - Displays to the user a single secret found
