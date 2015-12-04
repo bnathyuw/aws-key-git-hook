@@ -5,16 +5,15 @@ findFilesChanged(){
 }
 
 findChanges(){
-    read files
+    KEY_PATTERN="([^A-Z0-9]|^)[A-Z0-9]{20}([^A-Z0-9]|$)"
+    SECRET_PATTERN="([^A-Za-z0-9/+=]|^)[A-Za-z0-9/+=]{40}([^A-Za-z0-9/+=]|$)"
+    EQUALS_SECRET_PATTERN="=[A-Za-z0-9/+]{40}([^A-Za-z0-9/+]|$)"
 
-    if [ -n "$files" ]; then
-        KEY_PATTERN="([^A-Z0-9]|^)[A-Z0-9]{20}([^A-Z0-9]|$)"
-        SECRET_PATTERN="([^A-Za-z0-9/+=]|^)[A-Za-z0-9/+=]{40}([^A-Za-z0-9/+=]|$)"
-        EQUALS_SECRET_PATTERN="=[A-Za-z0-9/+]{40}([^A-Za-z0-9/+]|$)"
-        egrep -n "($KEY_PATTERN|$SECRET_PATTERN|$EQUALS_SECRET_PATTERN)" "$files"
-    else
-         echo ""
-    fi
+    while read file; do
+        if [ -n "$file" ]; then
+            egrep -n "($KEY_PATTERN|$SECRET_PATTERN|$EQUALS_SECRET_PATTERN)" "$file" 
+        fi
+    done
 }
 
 report(){

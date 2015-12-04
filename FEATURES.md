@@ -11,6 +11,7 @@
 - Doesn't complain when no files have been staged 
 
 ## TO DO
+- Can handle several staged files
 - Doesn't match strings of characters of not quite the right length
 - Displays to the user a single key found
 - Displays to the user a single secret found

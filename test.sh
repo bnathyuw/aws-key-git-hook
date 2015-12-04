@@ -79,6 +79,41 @@ test_findFilesChanged_returns_nothing_when_no_files_are_changed()
     findFilesChanged | assertEmpty
 }
 
+test_findFilesChanged_finds_a_new_file()
+{
+    echo "# I am a new file" > $WORKING_DIR/new.conf
+    git add -A
+    findFilesChanged | assertPattern "new.conf"
+}
+
+test_findFilesChanged_finds_more_than_one_file()
+{
+    echo "# I am a new file" > $WORKING_DIR/new.conf
+    git add -A
+    git commit -m "Preliminary commit" &> /dev/null
+    echo "# I now have some changes" >> $WORKING_DIR/new.conf
+    echo "# I am a new file" > $WORKING_DIR/new2.conf
+    git add -A
+
+    findFilesChanged | (
+        read file
+        assertEquals "new.conf" "$file"
+        read file
+        assertEquals "new2.conf" "$file"
+    )
+}
+
+test_findFilesChanged_finds_a_modified_file()
+{
+    echo "# I am an existing file" > $WORKING_DIR/existing.conf
+    git add -A
+    git commit -m "Preliminary commit" &> /dev/null
+
+    echo "# I now have some changes" >> $WORKING_DIR/existing.conf
+    git add -A
+    findFilesChanged | assertPattern "existing.conf"
+}
+
 test_findChanges_finds_nothing_when_no_files_are_changed()
 {
     echo "" | findChanges | assertEmpty
