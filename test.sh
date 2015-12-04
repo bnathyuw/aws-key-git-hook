@@ -15,7 +15,7 @@ setUp()
 {
     mkdir $WORKING_DIR
     cd $WORKING_DIR
-    git init
+    git init &> /dev/null
     ln $ROOT/pre-commit ./.git/hooks/pre-commit
 }
 
@@ -34,10 +34,20 @@ assertPattern()
     assertTrue "Expected message matching '$expected' but got '$actual'" "[[ '$actual' =~ '$expected' ]]"
 }
 
+assertEmpty()
+{
+    read actual
+    assertNull "$actual"
+}
+
+test_the_script_does_not_alert_when_no_files_have_been_changed()
+{
+    git commit -m "No commit will happen" 2>&1 | assertPattern "On branch master"
+}
+
 test_the_script_displays_an_alert_when_a_new_file_containing_an_aws_key_is_committed()
 {
     echo 'foo.aws.key="'$SAMPLE_AWS_KEY'"' > $WORKING_DIR/new.conf
-    cat $WORKING_DIR/new.conf
     git add -A
 
     git commit -m "This commit should fail" 2>&1 | assertPattern "$CREDENTIALS_FOUND"
@@ -47,7 +57,7 @@ test_the_script_displays_an_alert_when_an_aws_key_is_added_to_an_existing_file()
 {
     echo "# No secrets in here" > $WORKING_DIR/existing.conf
     git add -A
-    git commit -m "Preliminary commit"
+    git commit -m "Preliminary commit" &> /dev/null
 
     echo 'foo.aws.key="'$SAMPLE_AWS_KEY'"' >> $WORKING_DIR/existing.conf   
     git add -A
@@ -66,7 +76,12 @@ test_the_script_does_not_alert_when_a_new_file_containing_no_aws_keys_are_commit
 
 test_findFilesChanged_returns_nothing_when_no_files_are_changed()
 {
-    findFilesChanged | assertPattern "^$"
+    findFilesChanged | assertEmpty
+}
+
+test_findChanges_finds_nothing_when_no_files_are_changed()
+{
+    echo "" | findChanges | assertEmpty
 }
 
 test_findChanges_finds_key_surrounded_by_double_quotes()
