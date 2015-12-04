@@ -120,6 +120,13 @@ test_findChanges_finds_key_in_undelimited_bash_format()
     echo "$WORKING_DIR/new.conf" | findChanges | assertPattern "$content"
 }
 
+test_findChanges_finds_key_in_undelimited_yaml_format()
+{
+    content="foo.aws.key: $SAMPLE_AWS_KEY"
+    echo "$content" > $WORKING_DIR/new.conf
+    echo "$WORKING_DIR/new.conf" | findChanges | assertPattern "$content"
+}
+
 test_findChanges_finds_key_alone_on_line()
 {
     content="$SAMPLE_AWS_KEY"
@@ -155,6 +162,13 @@ test_findChanges_finds_secret_in_undelimited_bash_format()
     echo "$WORKING_DIR/new.conf" | findChanges | assertPattern "$content"
 }
 
+test_findChanges_finds_secret_in_undelimited_yaml_format()
+{
+    content="foo.aws.secret: $SAMPLE_AWS_SECRET"
+    echo "$content" > $WORKING_DIR/new.conf
+    echo "$WORKING_DIR/new.conf" | findChanges | assertPattern "$content"
+}
+
 test_findChanges_finds_secret_alone_on_line()
 {
     content="$SAMPLE_AWS_SECRET"
@@ -179,6 +193,13 @@ test_findChanges_finds_secret_with_special_characters_surrounded_by_single_quote
 test_findChanges_finds_secret_with_special_characters_surrounded_by_whitespace()
 {
     content="foo.aws.secret= $ANOTHER_SAMPLE_AWS_SECRET #comment to prevent whitespace collapse"
+    echo "$content" > $WORKING_DIR/new.conf
+    echo "$WORKING_DIR/new.conf" | findChanges | assertPattern "$content"
+}
+
+test_findChanges_finds_secret_with_special_characters_in_undelimited_yaml_format()
+{
+    content="foo.aws.secret: $ANOTHER_SAMPLE_AWS_SECRET"
     echo "$content" > $WORKING_DIR/new.conf
     echo "$WORKING_DIR/new.conf" | findChanges | assertPattern "$content"
 }
