@@ -9,6 +9,7 @@ CREDENTIALS_FOUND="AWS credentials found. Aborting commit."
 # THESE ARE NOT REAL AWS KEYS, OBVIOUSLY!
 SAMPLE_AWS_KEY="ASIAJCKR244245IV4FHQ"
 SAMPLE_AWS_SECRET="q6MVN9m0OSsNWUCWb5d7pnCjTEIHtiJT43SPk1Zy"
+ANOTHER_SAMPLE_AWS_SECRET="q6MVN9m0OS/NWUCWb5d=pnCjTE9HtiJT43SPk1Zy"
 
 setUp()
 {
@@ -146,4 +147,26 @@ test_findChanges_finds_secret_in_undelimited_bash_format()
     echo "$content" > $WORKING_DIR/new.conf
     echo "$WORKING_DIR/new.conf" | findChanges | assertPattern "$content"
 }
+
+test_findChanges_finds_secret_with_special_characters_surrounded_by_double_quotes()
+{
+    content='foo.aws.secret="'$ANOTHER_SAMPLE_AWS_SECRET'"'
+    echo "$content" > $WORKING_DIR/new.conf
+    echo "$WORKING_DIR/new.conf" | findChanges | assertPattern "$content"
+}
+
+test_findChanges_finds_secret_with_special_characters_surrounded_by_single_quotes()
+{
+    content="foo.aws.secret='$ANOTHER_SAMPLE_AWS_SECRET'"
+    echo "$content" > $WORKING_DIR/new.conf
+    echo "$WORKING_DIR/new.conf" | findChanges | assertPattern "$content"
+}
+
+test_findChanges_finds_secret_with_special_characters_surrounded_by_whitespace()
+{
+    content="foo.aws.secret= $ANOTHER_SAMPLE_AWS_SECRET #comment to prevent whitespace collapse"
+    echo "$content" > $WORKING_DIR/new.conf
+    echo "$WORKING_DIR/new.conf" | findChanges | assertPattern "$content"
+}
+
 . shunit2
