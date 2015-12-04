@@ -238,4 +238,15 @@ test_findChanges_finds_secret_with_special_characters_alone_on_line()
     echo "$WORKING_DIR/new.conf" | findChanges | assertPattern "$content"
 }
 
+test_findChanges_finds_credential_in_second_file()
+{
+    echo "# Nothing to see here" > $WORKING_DIR/old.conf
+    content="$SAMPLE_AWS_SECRET"
+    echo "$content" > $WORKING_DIR/new.conf
+    (
+        echo "$WORKING_DIR/old.conf"
+        echo "$WORKING_DIR/new.conf"
+    ) | findChanges | assertPattern "$content"
+}
+
 . shunit2
