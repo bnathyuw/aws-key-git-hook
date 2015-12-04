@@ -92,5 +92,12 @@ test_findFilesChanged_returns_nothing_when_no_files_are_changed()
     )
 }
 
+test_findChanges_finds_key_surrounded_by_double_quotes()
+{
+    content='foo.aws.key="'$SAMPLE_AWS_KEY'"'
+    echo "$content" > $WORKING_DIR/new.conf
+    echo "$WORKING_DIR/new.conf" | findChanges | assertPattern "$content"
+}
+
 . shunit2
 
