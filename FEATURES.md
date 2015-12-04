@@ -4,12 +4,12 @@
 - Does not intercept commit when no key or secret is present in the staged files
 - Matches keys and secrets in newly added files
 - Matches keys and secrets in edited files
-
-## TO DO
 - Matches keys and secrets at the end of a line
 - Matches keys and secrets enclosed in single quotes
 - Matches keys and secrets enclosed in double quotes
 - Matches keys and secrets surrounded by whitespace
+
+## TO DO
 - Doesn't match strings of characters of not quite the right length
 - Displays to the user a single key found
 - Displays to the user a single secret found
