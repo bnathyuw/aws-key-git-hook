@@ -212,4 +212,12 @@ test_findChanges_finds_credential_in_second_file()
     echo "old.conf new.conf" | findChanges | assertPattern "$content"
 }
 
+test_findChanges_outputs_name_of_file_in_which_credential_was_found()
+{
+    echo "# Nothing to see here" > old.conf
+    content="$SAMPLE_AWS_SECRET"
+    echo "$content" > new.conf
+    echo "old.conf new.conf" | findChanges | assertPattern "new.conf"
+}
+
 . shunit2
