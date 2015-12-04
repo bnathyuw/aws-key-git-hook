@@ -55,26 +55,6 @@ test_the_script_displays_an_alert_when_an_aws_key_is_added_to_an_existing_file()
     git commit -m "This commit should fail" 2>&1 | assertPattern "$CREDENTIALS_FOUND"
 }
 
-test_the_script_displays_an_alert_when_a_new_file_containing_an_aws_secret_is_committed()
-{
-    echo 'foo.aws.secret="'$SAMPLE_AWS_SECRET'"' > $WORKING_DIR/new.conf
-    git add -A
-
-    git commit -m "This commit should fail" 2>&1 | assertPattern "$CREDENTIALS_FOUND"
-}
-
-test_the_script_displays_an_alert_when_an_aws_secret_is_added_to_an_existing_file()
-{
-    echo "# No secrets in here" > $WORKING_DIR/existing.conf
-    git add -A
-    git commit -m "Preliminary commit"
-
-    echo 'foo.aws.secret="'$SAMPLE_AWS_SECRET'"' >> $WORKING_DIR/existing.conf   
-    git add -A
-
-    git commit -m "This commit should fail" 2>&1 | assertPattern "$CREDENTIALS_FOUND" 
-}
-
 test_the_script_does_not_alert_when_a_new_file_containing_no_aws_keys_are_committed()
 {
     echo "# No secrets in here" > $WORKING_DIR/existing.conf
