@@ -5,7 +5,7 @@
 
 ROOT=`pwd`
 WORKING_DIR=$ROOT/foo
-CREDENTIALS_FOUND="AWS credentials found. Aborting commit."
+CREDENTIALS_FOUND="AWS credentials found"
 # THESE ARE NOT REAL AWS KEYS, OBVIOUSLY!
 SAMPLE_AWS_KEY="ASIAJCKR244245IV4FHQ"
 SAMPLE_AWS_SECRET="q6MVN9m0OS/NWUCWb5d=pnCjTE9HtiJT43SPk1Zy"
@@ -44,7 +44,7 @@ test_the_script_does_not_alert_when_no_files_have_been_changed()
     git commit -m "No commit will happen" 2>&1 | assertPattern "On branch master"
 }
 
-test_the_script_displays_an_alert_when_a_new_file_containing_an_aws_key_is_committed()
+test_the_script_catches_a_credential_in_a_new_file()
 {
     echo 'foo.aws.key="'$SAMPLE_AWS_KEY'"' > new.conf
     git add -A
@@ -52,7 +52,7 @@ test_the_script_displays_an_alert_when_a_new_file_containing_an_aws_key_is_commi
     git commit -m "This commit should fail" 2>&1 | assertPattern "$CREDENTIALS_FOUND"
 }
 
-test_the_script_displays_an_alert_when_an_aws_key_is_added_to_an_existing_file()
+test_the_script_catches_a_credential_in_a_modified_file()
 {
     echo "# No secrets in here" > existing.conf
     git add -A
@@ -64,7 +64,7 @@ test_the_script_displays_an_alert_when_an_aws_key_is_added_to_an_existing_file()
     git commit -m "This commit should fail" 2>&1 | assertPattern "$CREDENTIALS_FOUND"
 }
 
-test_the_script_does_not_alert_when_a_new_file_containing_no_aws_keys_are_committed()
+test_the_script_does_not_prevent_commits_without_credentials()
 {
     echo "# No secrets in here" > existing.conf
     git add -A
@@ -220,4 +220,26 @@ test_findChanges_outputs_name_of_file_in_which_credential_was_found()
     echo "old.conf new.conf" | findChanges | assertPattern "new.conf"
 }
 
+test_report_is_empty_when_no_credentials_are_found()
+{
+    echo "" | report | assertEmpty
+}
+
+test_report_exits_with_zero_when_no_credentials_are_found()
+{
+    echo "" | report
+    assertEquals 0 $?
+}
+
+test_report_exits_non_zero_when_credentials_are_found()
+{
+    echo "one" | report &> /dev/null
+    assertNotEquals 0 $?
+}
+
+test_report_shows_all_credentials()
+{
+    MATCHES="one\ntwo\nthree\nfour\nfive"
+    echo $MATCHES | report | tr '\n' ' ' | assertPattern "one two three four five"
+}
 . shunit2

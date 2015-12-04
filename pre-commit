@@ -21,8 +21,11 @@ report(){
     read credentials
 
     if [ -n "$credentials" ]; then
-        echo "AWS credentials found. Aborting commit."
+        echo "AWS credentials found:"
         echo $credentials
+        while read credentials; do
+            echo $credentials
+        done
         exit 1
     else
         exit 0
