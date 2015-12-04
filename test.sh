@@ -112,12 +112,38 @@ test_findChanges_finds_key_surrounded_by_whitespace()
     echo "$WORKING_DIR/new.conf" | findChanges | assertPattern "$content"
 }
 
-test_findChanges_finds_key_without_delimiter_at_end_of_line()
+test_findChanges_finds_key__in_undelimited_bash_format()
 {
     content="foo.aws.key=$SAMPLE_AWS_KEY"
     echo "$content" > $WORKING_DIR/new.conf
     echo "$WORKING_DIR/new.conf" | findChanges | assertPattern "$content"
 }
 
-. shunit2
+test_findChanges_finds_secret_surrounded_by_double_quotes()
+{
+    content='foo.aws.secret="'$SAMPLE_AWS_SECRET'"'
+    echo "$content" > $WORKING_DIR/new.conf
+    echo "$WORKING_DIR/new.conf" | findChanges | assertPattern "$content"
+}
 
+test_findChanges_finds_secret_surrounded_by_single_quotes()
+{
+    content="foo.aws.secret='$SAMPLE_AWS_SECRET'"
+    echo "$content" > $WORKING_DIR/new.conf
+    echo "$WORKING_DIR/new.conf" | findChanges | assertPattern "$content"
+}
+
+test_findChanges_finds_secret_surrounded_by_whitespace()
+{
+    content="foo.aws.secret= $SAMPLE_AWS_SECRET #comment to prevent whitespace collapse"
+    echo "$content" > $WORKING_DIR/new.conf
+    echo "$WORKING_DIR/new.conf" | findChanges | assertPattern "$content"
+}
+
+test_findChanges_finds_secret__in_undelimited_bash_format()
+{
+    content="foo.aws.secret=$SAMPLE_AWS_SECRET"
+    echo "$content" > $WORKING_DIR/new.conf
+    echo "$WORKING_DIR/new.conf" | findChanges | assertPattern "$content"
+}
+. shunit2
