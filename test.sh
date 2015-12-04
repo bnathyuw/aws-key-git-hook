@@ -95,12 +95,7 @@ test_findFilesChanged_finds_more_than_one_file()
     echo "# I am a new file" > new2.conf
     git add -A
 
-    findFilesChanged | (
-        read file
-        assertEquals "new.conf" "$file"
-        read file
-        assertEquals "new2.conf" "$file"
-    )
+    findFilesChanged | assertPattern "new.conf new2.conf" 
 }
 
 test_findFilesChanged_finds_a_modified_file()
@@ -243,10 +238,7 @@ test_findChanges_finds_credential_in_second_file()
     echo "# Nothing to see here" > old.conf
     content="$SAMPLE_AWS_SECRET"
     echo "$content" > new.conf
-    (
-        echo "old.conf"
-        echo "new.conf"
-    ) | findChanges | assertPattern "$content"
+    echo "old.conf new.conf" | findChanges | assertPattern "$content"
 }
 
 . shunit2
