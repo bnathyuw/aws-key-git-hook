@@ -1,6 +1,8 @@
 #!/bin/sh
 # file: first-test.sh
 
+. pre-commit &> /dev/null
+
 ROOT=`pwd`
 WORKING_DIR=$ROOT/foo
 CREDENTIALS_FOUND="AWS credentials found. Aborting commit."
@@ -31,7 +33,7 @@ assertPattern()
     assertTrue "Expected message matching '$expected' but got '$actual'" "[[ '$actual' =~ '$expected' ]]"
 }
 
-test_it_displays_an_alert_when_a_new_file_containing_an_aws_key_is_committed()
+test_the_script_displays_an_alert_when_a_new_file_containing_an_aws_key_is_committed()
 {
     echo 'foo.aws.key="'$SAMPLE_AWS_KEY'"' > $WORKING_DIR/new.conf
     cat $WORKING_DIR/new.conf
@@ -40,7 +42,7 @@ test_it_displays_an_alert_when_a_new_file_containing_an_aws_key_is_committed()
     git commit -m "This commit should fail" 2>&1 | assertPattern "$CREDENTIALS_FOUND"
 }
 
-test_it_displays_an_alert_when_an_aws_key_is_added_to_an_existing_file()
+test_the_script_displays_an_alert_when_an_aws_key_is_added_to_an_existing_file()
 {
     echo "# No secrets in here" > $WORKING_DIR/existing.conf
     git add -A
@@ -52,7 +54,7 @@ test_it_displays_an_alert_when_an_aws_key_is_added_to_an_existing_file()
     git commit -m "This commit should fail" 2>&1 | assertPattern "$CREDENTIALS_FOUND"
 }
 
-test_it_displays_an_alert_when_a_new_file_containing_an_aws_secret_is_committed()
+test_the_script_displays_an_alert_when_a_new_file_containing_an_aws_secret_is_committed()
 {
     echo 'foo.aws.secret="'$SAMPLE_AWS_SECRET'"' > $WORKING_DIR/new.conf
     git add -A
@@ -60,7 +62,7 @@ test_it_displays_an_alert_when_a_new_file_containing_an_aws_secret_is_committed(
     git commit -m "This commit should fail" 2>&1 | assertPattern "$CREDENTIALS_FOUND"
 }
 
-test_it_displays_an_alert_when_an_aws_secret_is_added_to_an_existing_file()
+test_the_script_displays_an_alert_when_an_aws_secret_is_added_to_an_existing_file()
 {
     echo "# No secrets in here" > $WORKING_DIR/existing.conf
     git add -A
@@ -73,13 +75,21 @@ test_it_displays_an_alert_when_an_aws_secret_is_added_to_an_existing_file()
     git commit -m "This commit should fail" 2>&1 | assertPattern "$CREDENTIALS_FOUND" 
 }
 
-test_it_does_not_alert_when_a_new_file_containing_no_aws_keys_are_committed()
+test_the_script_does_not_alert_when_a_new_file_containing_no_aws_keys_are_committed()
 {
     echo "# No secrets in here" > $WORKING_DIR/existing.conf
     git add -A
 
     message="This commit should succeed"
     git commit -m "$message" 2>&1 | assertPattern "$message"
+}
+
+test_findFilesChanged_returns_nothing_when_no_files_are_changed()
+{
+    findFilesChanged | (
+        read files
+        assertEquals "$files" ""
+    )
 }
 
 . shunit2
