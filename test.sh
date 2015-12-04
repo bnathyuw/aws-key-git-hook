@@ -68,7 +68,6 @@ test_the_script_displays_an_alert_when_an_aws_secret_is_added_to_an_existing_fil
     git add -A
     git commit -m "Preliminary commit"
 
-    cat $ROOT/i.have.an.aws.secret.conf > $WORKING_DIR/to.be.edited.conf
     echo 'foo.aws.secret="'$SAMPLE_AWS_SECRET'"' >> $WORKING_DIR/existing.conf   
     git add -A
 
@@ -95,6 +94,27 @@ test_findFilesChanged_returns_nothing_when_no_files_are_changed()
 test_findChanges_finds_key_surrounded_by_double_quotes()
 {
     content='foo.aws.key="'$SAMPLE_AWS_KEY'"'
+    echo "$content" > $WORKING_DIR/new.conf
+    echo "$WORKING_DIR/new.conf" | findChanges | assertPattern "$content"
+}
+
+test_findChanges_finds_key_surrounded_by_single_quotes()
+{
+    content="foo.aws.key='$SAMPLE_AWS_KEY'"
+    echo "$content" > $WORKING_DIR/new.conf
+    echo "$WORKING_DIR/new.conf" | findChanges | assertPattern "$content"
+}
+
+test_findChanges_finds_key_surrounded_by_whitespace()
+{
+    content="foo.aws.key= $SAMPLE_AWS_KEY #comment to prevent whitespace collapse"
+    echo "$content" > $WORKING_DIR/new.conf
+    echo "$WORKING_DIR/new.conf" | findChanges | assertPattern "$content"
+}
+
+test_findChanges_finds_key_without_delimiter_at_end_of_line()
+{
+    content="foo.aws.key=$SAMPLE_AWS_KEY"
     echo "$content" > $WORKING_DIR/new.conf
     echo "$WORKING_DIR/new.conf" | findChanges | assertPattern "$content"
 }
