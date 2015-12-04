@@ -8,8 +8,7 @@ WORKING_DIR=$ROOT/foo
 CREDENTIALS_FOUND="AWS credentials found. Aborting commit."
 # THESE ARE NOT REAL AWS KEYS, OBVIOUSLY!
 SAMPLE_AWS_KEY="ASIAJCKR244245IV4FHQ"
-SAMPLE_AWS_SECRET="q6MVN9m0OSsNWUCWb5d7pnCjTEIHtiJT43SPk1Zy"
-ANOTHER_SAMPLE_AWS_SECRET="q6MVN9m0OS/NWUCWb5d=pnCjTE9HtiJT43SPk1Zy"
+SAMPLE_AWS_SECRET="q6MVN9m0OS/NWUCWb5d=pnCjTE9HtiJT43SPk1Zy"
 
 setUp()
 {
@@ -156,6 +155,13 @@ test_findChanges_finds_key_alone_on_line()
     echo "new.conf" | findChanges | assertPattern "$content"
 }
 
+test_findChanges_finds_secret_in_undelimited_bash_format()
+{
+    content="foo.aws.secret=$SAMPLE_AWS_SECRET"
+    echo "$content" > new.conf
+    echo "new.conf" | findChanges | assertPattern "$content"
+}
+
 test_findChanges_finds_secret_surrounded_by_double_quotes()
 {
     content='foo.aws.secret="'$SAMPLE_AWS_SECRET'"'
@@ -194,41 +200,6 @@ test_findChanges_finds_secret_in_undelimited_yaml_format()
 test_findChanges_finds_secret_alone_on_line()
 {
     content="$SAMPLE_AWS_SECRET"
-    echo "$content" > new.conf
-    echo "new.conf" | findChanges | assertPattern "$content"
-}
-
-test_findChanges_finds_secret_with_special_characters_surrounded_by_double_quotes()
-{
-    content='foo.aws.secret="'$ANOTHER_SAMPLE_AWS_SECRET'"'
-    echo "$content" > new.conf
-    echo "new.conf" | findChanges | assertPattern "$content"
-}
-
-test_findChanges_finds_secret_with_special_characters_surrounded_by_single_quotes()
-{
-    content="foo.aws.secret='$ANOTHER_SAMPLE_AWS_SECRET'"
-    echo "$content" > new.conf
-    echo "new.conf" | findChanges | assertPattern "$content"
-}
-
-test_findChanges_finds_secret_with_special_characters_surrounded_by_whitespace()
-{
-    content="foo.aws.secret= $ANOTHER_SAMPLE_AWS_SECRET #comment to prevent whitespace collapse"
-    echo "$content" > new.conf
-    echo "new.conf" | findChanges | assertPattern "$content"
-}
-
-test_findChanges_finds_secret_with_special_characters_in_undelimited_yaml_format()
-{
-    content="foo.aws.secret: $ANOTHER_SAMPLE_AWS_SECRET"
-    echo "$content" > new.conf
-    echo "new.conf" | findChanges | assertPattern "$content"
-}
-
-test_findChanges_finds_secret_with_special_characters_alone_on_line()
-{
-    content="$ANOTHER_SAMPLE_AWS_SECRET"
     echo "$content" > new.conf
     echo "new.conf" | findChanges | assertPattern "$content"
 }
