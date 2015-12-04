@@ -66,10 +66,7 @@ test_the_script_does_not_alert_when_a_new_file_containing_no_aws_keys_are_commit
 
 test_findFilesChanged_returns_nothing_when_no_files_are_changed()
 {
-    findFilesChanged | (
-        read files
-        assertEquals "$files" ""
-    )
+    findFilesChanged | assertPattern "^$"
 }
 
 test_findChanges_finds_key_surrounded_by_double_quotes()
