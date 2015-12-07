@@ -11,3 +11,7 @@ You will need [shunit2](https://github.com/kward/shunit2). Clone this project an
 ## Running the Tests
 
 From the root of this project, run `./first-test.sh`
+
+## Acknowledgements
+
+Many thanks to [Aniket Panse](https://gist.github.com/czardoz) who created [this pre-commit hook](https://gist.github.com/czardoz/b8bb58ad10f4063209bd), which acted as my starting point.
