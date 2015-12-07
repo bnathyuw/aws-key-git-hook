@@ -48,9 +48,8 @@ confirmAction(){
     fi    
 }
 
-findFilesChanged | findChanges | report
-SHOULD_CONFIRM=$?
-
 exec < /dev/tty
-confirmAction $SHOULD_CONFIRM
+findFilesChanged | findChanges | report
+
+confirmAction $?
 exec <&-
