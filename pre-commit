@@ -1,16 +1,19 @@
 #! /bin/sh
 
-getInputFromTerminal(){
+getInputFromTerminal()
+{
   if [ "$GIT_AUTHOR_NAME" != "AWS Key Git Hook Test" ]; then
     exec < /dev/tty
   fi   
 }
 
-findFilesChanged(){
+findFilesChanged()
+{
   git diff --staged --name-only | tr '\n' ' '
 }
 
-findChanges(){
+findChanges()
+{
   read FILES
 
   KEY_PATTERN="([^A-Z0-9]|^)[A-Z0-9]{20}([^A-Z0-9]|$)"
@@ -23,7 +26,8 @@ findChanges(){
   fi
 }
 
-report(){
+report()
+{
   read CREDENTIALS
 
   if [ -n "$CREDENTIALS" ]; then
@@ -38,7 +42,8 @@ report(){
   fi
 }
 
-confirmAction(){
+confirmAction()
+{
   if [ $1 -ne 0 ]; then
     read -p "Commit anyway? (y/N) " ANSWER
     case $ANSWER in
