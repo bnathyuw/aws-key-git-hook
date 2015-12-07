@@ -34,12 +34,12 @@ report(){
 
 confirmAction(){
     if [ $1 -ne 0 ]; then
-        read -p "Commit anyway? (y/N)" answer
+        read -p "Commit anyway? (y/N) " answer
         case $answer in
             "n" | "N" | "") exit 1;;
             "y" | "Y" ) exit 0;;
         esac
-        while read -p "Please answer y/N" answer; do
+        while read -p "Please answer y/N " answer; do
             case $answer in
 	        "n" | "N" | "") exit 1;;
                 "y" | "Y" ) exit 0;;
@@ -49,3 +49,8 @@ confirmAction(){
 }
 
 findFilesChanged | findChanges | report
+SHOULD_CONFIRM=$?
+
+exec < /dev/tty
+confirmAction $SHOULD_CONFIRM
+exec <&-
