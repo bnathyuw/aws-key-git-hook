@@ -52,7 +52,7 @@ confirmAction()
     esac
     while read -p "Please answer y/N " ANSWER; do
       case $ANSWER in
-	    "n" | "N" | "") exit 1;;
+	"n" | "N" | "") exit 1;;
         "y" | "Y" ) exit 0;;
       esac
     done
