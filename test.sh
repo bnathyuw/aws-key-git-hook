@@ -15,6 +15,7 @@ setUp()
     mkdir $WORKING_DIR
     cd $WORKING_DIR
     git init &> /dev/null
+    git config user.name "AWS Key Git Hook Test"
     ln $ROOT/pre-commit ./.git/hooks/pre-commit
 }
 
