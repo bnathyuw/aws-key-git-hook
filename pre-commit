@@ -34,11 +34,17 @@ report(){
 
 confirmAction(){
     if [ $1 -ne 0 ]; then
-        echo "Commit anyway? (y/N)"
-        read answer
+        read -p "Commit anyway? (y/N)" answer
         case $answer in
             "n" | "N" | "") exit 1;;
+            "y" | "Y" ) exit 0;;
         esac
+        while read -p "Please answer y/N" answer; do
+            case $answer in
+	        "n" | "N" | "") exit 1;;
+                "y" | "Y" ) exit 0;;
+            esac
+        done
     fi    
 }
 

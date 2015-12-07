@@ -249,11 +249,6 @@ test_confirmAction_does_nothing_with_a_zero_exit_code()
     assertEquals 0 $?
 }
 
-test_confirmAction_prompts_for_confirmation_when_given_a_non_zero_exit_code()
-{
-    echo "y" | confirmAction 1 | assertPattern "Commit anyway?"
-}
-
 test_confirmAction_exits_with_zero_when_the_answer_is_y()
 {
     echo "y" | confirmAction 1 &> /dev/null
@@ -266,22 +261,45 @@ test_confirmAction_exits_with_zero_when_the_answer_is_Y()
     assertEquals 0 $?
 }
 
-test_confirmation_exits_with_one_when_the_answer_is_n()
+test_confirmAction_exits_with_one_when_the_answer_is_n()
 {
     echo "n" | confirmAction 1 &> /dev/null
     assertEquals 1 $?
 }
 
-test_confirmation_exits_with_one_when_the_answer_is_N()
+test_confirmAction_exits_with_one_when_the_answer_is_N()
 {
     echo "N" | confirmAction 1 &> /dev/null
     assertEquals 1 $?
 }
 
-test_confirmation_exits_with_one_when_the_default_answer_is_given()
+test_confirmAction_exits_with_one_when_the_default_answer_is_given()
 {
     echo "" | confirmAction 1 &> /dev/null
     assertEquals 1 $?
+}
+
+test_confirmAction_asks_again_if_it_gets_unknown_input()
+{
+    (
+        echo "b"
+        echo "n"
+    ) | confirmAction 1 &> /dev/null
+    assertEquals 1 $?
+}
+
+test_confirmAction_asks_many_times_till_it_gets_a_valid_answer()
+{
+    (
+        echo "b"
+        echo "b"
+        echo "b"
+        echo "b"
+        echo "b"
+        echo "b"
+        echo "y"
+    ) | confirmAction 1 &> /dev/null
+    assertEquals 0 $?
 }
 
 . shunit2
