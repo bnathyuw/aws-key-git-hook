@@ -35,8 +35,11 @@ report(){
 confirmAction(){
     if [ $1 -ne 0 ]; then
         echo "Commit anyway? (y/N)"
+        read answer
+        case $answer in
+            "n" | "N" | "") exit 1;;
+        esac
     fi    
 }
 
 findFilesChanged | findChanges | report
-

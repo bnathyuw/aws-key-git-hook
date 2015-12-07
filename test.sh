@@ -243,15 +243,45 @@ test_report_shows_all_credentials()
     echo $MATCHES | report | tr '\n' ' ' | assertPattern "one two three four five"
 }
 
-test_confirmAction_exits_on_zero()
+test_confirmAction_does_nothing_with_a_zero_exit_code()
 {
     confirmAction 0
     assertEquals 0 $?
 }
 
-test_confirmAction_does_something_on_one()
+test_confirmAction_prompts_for_confirmation_when_given_a_non_zero_exit_code()
 {
-    confirmAction 1 | assertPattern "Commit anyway?"
+    echo "y" | confirmAction 1 | assertPattern "Commit anyway?"
+}
+
+test_confirmAction_exits_with_zero_when_the_answer_is_y()
+{
+    echo "y" | confirmAction 1 &> /dev/null
+    assertEquals 0 $?
+}
+
+test_confirmAction_exits_with_zero_when_the_answer_is_Y()
+{
+    echo "Y" | confirmAction 1 &> /dev/null
+    assertEquals 0 $?
+}
+
+test_confirmation_exits_with_one_when_the_answer_is_n()
+{
+    echo "n" | confirmAction 1 &> /dev/null
+    assertEquals 1 $?
+}
+
+test_confirmation_exits_with_one_when_the_answer_is_N()
+{
+    echo "N" | confirmAction 1 &> /dev/null
+    assertEquals 1 $?
+}
+
+test_confirmation_exits_with_one_when_the_default_answer_is_given()
+{
+    echo "" | confirmAction 1 &> /dev/null
+    assertEquals 1 $?
 }
 
 . shunit2
