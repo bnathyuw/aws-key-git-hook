@@ -32,4 +32,11 @@ report(){
     fi
 }
 
+confirmAction(){
+    if [ $1 -ne 0 ]; then
+        echo "Commit anyway? (y/N)"
+    fi    
+}
+
 findFilesChanged | findChanges | report
+

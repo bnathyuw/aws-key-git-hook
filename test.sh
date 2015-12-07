@@ -242,4 +242,16 @@ test_report_shows_all_credentials()
     MATCHES="one\ntwo\nthree\nfour\nfive"
     echo $MATCHES | report | tr '\n' ' ' | assertPattern "one two three four five"
 }
+
+test_confirmAction_exits_on_zero()
+{
+    confirmAction 0
+    assertEquals 0 $?
+}
+
+test_confirmAction_does_something_on_one()
+{
+    confirmAction 1 | assertPattern "Commit anyway?"
+}
+
 . shunit2
