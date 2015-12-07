@@ -65,6 +65,16 @@ test_the_script_catches_a_credential_in_a_modified_file()
   git commit -m "This commit should fail" 2>&1 | assertPattern "$CREDENTIALS_FOUND"
 }
 
+test_the_script_catches_a_credential_in_a_branch()
+{
+  git checkout -b a_new_branch
+
+  echo 'foo.aws.key="'$SAMPLE_AWS_KEY'"' > new.conf
+  git add -A
+
+  git commit -m "This commit should fail" 2>&1 | assertPattern "$CREDENTIALS_FOUND"
+}
+
 test_the_script_does_not_prevent_commits_without_credentials()
 {
   echo "# No secrets in here" > existing.conf

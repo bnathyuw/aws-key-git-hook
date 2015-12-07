@@ -18,8 +18,8 @@
 - Does not commit when user hits return
 - Commits changes when user types y
 - Asks again when user types anything else
+- Works on master
+- Works on a branch
 
 ## TO DO
 - Doesn't match strings of characters of not quite the right length
-- Works on master
-- Works on a branch
