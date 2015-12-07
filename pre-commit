@@ -1,57 +1,57 @@
 #! /bin/sh
 
 getInputFromTerminal(){
-    if [ "$GIT_AUTHOR_NAME" != "AWS Key Git Hook Test" ]; then
-        exec < /dev/tty
-    fi   
+  if [ "$GIT_AUTHOR_NAME" != "AWS Key Git Hook Test" ]; then
+    exec < /dev/tty
+  fi   
 }
 
 findFilesChanged(){
-    git diff --staged --name-only | tr '\n' ' '
+  git diff --staged --name-only | tr '\n' ' '
 }
 
 findChanges(){
-    read FILES
+  read FILES
 
-    KEY_PATTERN="([^A-Z0-9]|^)[A-Z0-9]{20}([^A-Z0-9]|$)"
-    SECRET_PATTERN="([^A-Za-z0-9/+]|^)[A-Za-z0-9/+=]{40}([^A-Za-z0-9/+=]|$)"
+  KEY_PATTERN="([^A-Z0-9]|^)[A-Z0-9]{20}([^A-Z0-9]|$)"
+  SECRET_PATTERN="([^A-Za-z0-9/+]|^)[A-Za-z0-9/+=]{40}([^A-Za-z0-9/+=]|$)"
 
-    if [ -n "$FILES" ]; then
-        egrep -n "($KEY_PATTERN|$SECRET_PATTERN)" $FILES 
-    else
-        echo ""
-    fi
+  if [ -n "$FILES" ]; then
+    egrep -n "($KEY_PATTERN|$SECRET_PATTERN)" $FILES 
+  else
+    echo ""
+  fi
 }
 
 report(){
-    read CREDENTIALS
+  read CREDENTIALS
 
-    if [ -n "$CREDENTIALS" ]; then
-        echo "AWS credentials found:"
-        echo $CREDENTIALS
-        while read CREDENTIALS; do
-            echo $CREDENTIALS
-        done
-        exit 1
-    else
-        exit 0
-    fi
+  if [ -n "$CREDENTIALS" ]; then
+    echo "AWS credentials found:"
+    echo $CREDENTIALS
+    while read CREDENTIALS; do
+      echo $CREDENTIALS
+    done
+    exit 1
+  else
+    exit 0
+  fi
 }
 
 confirmAction(){
-    if [ $1 -ne 0 ]; then
-        read -p "Commit anyway? (y/N) " ANSWER
-        case $ANSWER in
-            "n" | "N" | "") exit 1;;
-            "y" | "Y" ) exit 0;;
-        esac
-        while read -p "Please answer y/N " ANSWER; do
-            case $ANSWER in
-	        "n" | "N" | "") exit 1;;
-                "y" | "Y" ) exit 0;;
-            esac
-        done
-    fi    
+  if [ $1 -ne 0 ]; then
+    read -p "Commit anyway? (y/N) " ANSWER
+    case $ANSWER in
+      "n" | "N" | "") exit 1;;
+      "y" | "Y" ) exit 0;;
+    esac
+    while read -p "Please answer y/N " ANSWER; do
+      case $ANSWER in
+	    "n" | "N" | "") exit 1;;
+        "y" | "Y" ) exit 0;;
+      esac
+    done
+  fi  
 }
 
 getInputFromTerminal
