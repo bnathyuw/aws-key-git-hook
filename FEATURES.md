@@ -23,3 +23,4 @@
 
 ## TO DO
 - Doesn't match strings of characters of not quite the right length
+- Only search lines that have changed. (At the moment it will spot pre-existing credentials in a file you have changed.)
