@@ -15,7 +15,6 @@ setUp()
   mkdir $WORKING_DIR
   cd $WORKING_DIR
   git init &> /dev/null
-  git config user.name "AWS Key Git Hook Test"
   ln $ROOT/pre-commit ./.git/hooks/pre-commit
 }
 
@@ -252,65 +251,6 @@ test_report_shows_all_credentials()
 {
   MATCHES="one\ntwo\nthree\nfour\nfive"
   echo $MATCHES | report | tr '\n' ' ' | assertPattern "one two three four five"
-}
-
-test_confirmAction_does_nothing_with_a_zero_exit_code()
-{
-  confirmAction 0
-  assertEquals 0 $?
-}
-
-test_confirmAction_exits_with_zero_when_the_answer_is_y()
-{
-  echo "y" | confirmAction 1 &> /dev/null
-  assertEquals 0 $?
-}
-
-test_confirmAction_exits_with_zero_when_the_answer_is_Y()
-{
-  echo "Y" | confirmAction 1 &> /dev/null
-  assertEquals 0 $?
-}
-
-test_confirmAction_exits_with_one_when_the_answer_is_n()
-{
-  echo "n" | confirmAction 1 &> /dev/null
-  assertEquals 1 $?
-}
-
-test_confirmAction_exits_with_one_when_the_answer_is_N()
-{
-  echo "N" | confirmAction 1 &> /dev/null
-  assertEquals 1 $?
-}
-
-test_confirmAction_exits_with_one_when_the_default_answer_is_given()
-{
-  echo "" | confirmAction 1 &> /dev/null
-  assertEquals 1 $?
-}
-
-test_confirmAction_asks_again_if_it_gets_unknown_input()
-{
-  (
-    echo "b"
-    echo "n"
-  ) | confirmAction 1 &> /dev/null
-  assertEquals 1 $?
-}
-
-test_confirmAction_asks_many_times_till_it_gets_a_valid_answer()
-{
-  (
-    echo "b"
-    echo "b"
-    echo "b"
-    echo "b"
-    echo "b"
-    echo "b"
-    echo "y"
-  ) | confirmAction 1 &> /dev/null
-  assertEquals 0 $?
 }
 
 . shunit2

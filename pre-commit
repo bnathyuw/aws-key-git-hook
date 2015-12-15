@@ -1,12 +1,5 @@
 #! /bin/sh
 
-getInputFromTerminal()
-{
-  if [ "$GIT_AUTHOR_NAME" != "AWS Key Git Hook Test" ]; then
-    exec < /dev/tty
-  fi   
-}
-
 findFilesChanged()
 {
   git diff --staged --name-only | tr '\n' ' '
@@ -42,25 +35,4 @@ report()
   fi
 }
 
-confirmAction()
-{
-  if [ $1 -ne 0 ]; then
-    read -p "Commit anyway? (y/N) " ANSWER
-    case $ANSWER in
-      "n" | "N" | "") exit 1;;
-      "y" | "Y" ) exit 0;;
-    esac
-    while read -p "Please answer y/N " ANSWER; do
-      case $ANSWER in
-	"n" | "N" | "") exit 1;;
-        "y" | "Y" ) exit 0;;
-      esac
-    done
-  fi  
-}
-
-getInputFromTerminal
-
 findFilesChanged | findChanges | report
-
-confirmAction $?
