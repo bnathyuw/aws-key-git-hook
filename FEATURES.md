@@ -13,15 +13,10 @@
 - Displays to the user a single key found
 - Displays to the user a single secret found
 - Displays to the user multiple keys and secrets found
-- Prompts for confirmation: ‘Do you want to commit anyway? (y/N)’
-- Does not commit when user types n
-- Does not commit when user hits return
-- Commits changes when user types y
-- Asks again when user types anything else
 - Works on master
 - Works on a branch
+- Works with Git Gui
 
 ## TO DO
 - Doesn't match strings of characters of not quite the right length
 - Only search lines that have changed. (At the moment it will spot pre-existing credentials in a file you have changed.)
-- Works with Git Gui
