@@ -15,7 +15,7 @@ setUp()
   mkdir $WORKING_DIR
   cd $WORKING_DIR
   git init &> /dev/null
-  ln $ROOT/pre-commit ./.git/hooks/pre-commit
+  ln -Ffs $ROOT/pre-commit ./.git/hooks/pre-commit
 }
 
 tearDown()
@@ -251,6 +251,11 @@ test_report_shows_all_credentials()
 {
   MATCHES="one\ntwo\nthree\nfour\nfive"
   echo $MATCHES | report | tr '\n' ' ' | assertPattern "one two three four five"
+}
+
+test_report_suggests_command_line_workaround()
+{
+  echo "one" | report | tr '\n' ' ' | assertPattern "git commit --no-verify"
 }
 
 . shunit2

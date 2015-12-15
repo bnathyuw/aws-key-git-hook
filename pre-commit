@@ -29,6 +29,7 @@ report()
     while read CREDENTIALS; do
       echo $CREDENTIALS
     done
+    echo "If you are 100% confident that these changes are safe, then you can circumvent this check by committing from the command line using the  --no-verify  flag:\n\tgit commit --no-verify"
     exit 1
   else
     exit 0
